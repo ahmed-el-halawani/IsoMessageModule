@@ -1,20 +1,17 @@
 package IsoFieldConverter
 
-import IsoHelpers.paddingLeft
-
-
-class BcdFieldConverter(paddingWith: Char? = '0') : BaseIsoFieldConverter(paddingWith) {
+class HexFieldConverter(paddingWith: Char? = ' ') : BaseIsoFieldConverter(paddingWith) {
 
     override fun getLength(numberOfChars: Int): Int {
-        return numberOfChars * 2
+        return numberOfChars
     }
 
     override fun fromHex(hexValue: String): String {
-        return hexValue.toLong().toString()
+        return hexValue
     }
 
     override fun toHex(value: String, fieldLength: Int): String {
-        return paddingLeft(value, fieldLength, "0")
+        return value.uppercase()
     }
 
     override fun inHexLength(numberOfChars: Int): Int {

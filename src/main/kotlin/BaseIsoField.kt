@@ -1,80 +1,30 @@
 import IsoFieldConverter.BaseIsoFieldConverter
 import IsoFieldConverter.BcdFieldConverter
-import kotlin.math.max
 
-data class BaseIsoField(
-    private var maxLength: Int,
+abstract class BaseIsoField(
+    protected var maxLength: Int,
     val conversion: BaseIsoFieldConverter = BcdFieldConverter(),
-    val paddingType: IsoFieldPaddingType = IsoFieldPaddingType.Default,
-    private val isFixed: Boolean = true,
-    private val defaultValue: String = ""
+    protected val isFixed: Boolean = true,
+    protected val defaultValue: String? = null
 ) {
 
-    private var value = defaultValue
+    var value: String? = defaultValue
+        protected set
 
-    var length: Int = conversion.getLength(maxLength)
-        private set
+    var length: Int = maxLength
+        protected set
 
-    public fun setValue(value: String) {
-        this.value = value
+    open var hex: String? = null
+        protected set
 
-        if (!isFixed) setLength(this.value.length)
-    }
+    abstract fun setFieldValue(value: String)
 
-    public fun setValue(value: Int) {
-        this.value = value.toString()
+    abstract fun setHexValue(hexValue: String)
 
-        if (!isFixed) setLength(this.value.length)
-    }
-
-    public fun getValue(): String {
-        return value;
-    }
-
-    public fun setHexValue(hexValue: String) {
-        value = conversion.fromHex(hexValue)
-    }
-
-    public fun getHexValue(): String {
-        return conversion.toHex(value, paddingType)
-    }
-
-    public fun setLength(length: Int) {
-        if (isFixed) {
-            this.length = conversion.getLength(length)
-            this.maxLength = conversion.getLength(length)
-        } else {
-            this.length = conversion.getLength(length)
-            this.length += getLengthLength()
-        }
-    }
-
-    public fun getLengthLength(): Int {
-        return if (maxLength <= 100) 2
-        else 3
-    }
+    abstract fun getLengthFromHex(hexValue: String): Int
 
     override fun toString(): String {
-        return "BaseIsoField(maxLength=$maxLength, conversion=$conversion, paddingType=$paddingType, isFixed=$isFixed, defaultValue='$defaultValue', value='$value', length=$length)"
-    }
-
-
-}
-
-enum class IsoFieldConversionType {
-    Bcd, Hex, Ascii, Binary, Base64
-}
-
-enum class IsoFieldPaddingType {
-    Default, Zeros, Nulls, Spaces;
-
-    companion object {
-        fun getDefaultType(conversionType: IsoFieldConversionType): IsoFieldPaddingType = when (conversionType) {
-            IsoFieldConversionType.Bcd -> Zeros
-            IsoFieldConversionType.Hex -> Zeros
-            IsoFieldConversionType.Ascii -> Spaces
-            IsoFieldConversionType.Binary -> Zeros
-            IsoFieldConversionType.Base64 -> Spaces
-        }
+        return "BaseIsoField(maxLength=$maxLength, conversion=$conversion, isFixed=$isFixed, defaultValue='$defaultValue', value='$value', length=$length)"
     }
 }
+

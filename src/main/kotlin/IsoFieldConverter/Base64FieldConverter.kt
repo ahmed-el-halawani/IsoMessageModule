@@ -1,21 +1,21 @@
 package IsoFieldConverter
 
-import IsoFieldPaddingType
 
-class Base64FieldConverter : BaseIsoFieldConverter {
+class Base64FieldConverter(paddingWith: Char? = ' ') : BaseIsoFieldConverter(paddingWith) {
     override fun getLength(numberOfChars: Int): Int {
-        return numberOfChars * 2
+        return numberOfChars
     }
 
     override fun fromHex(hexValue: String): String {
         return ""
     }
 
-    override fun toHex(value: String, paddingType: IsoFieldPaddingType): String {
+    override fun toHex(value: String, fieldLength: Int): String {
         TODO("Not yet implemented")
     }
 
-    override fun toHex(value: Int, paddingType: IsoFieldPaddingType): String {
-        TODO("Not yet implemented")
+    override fun inHexLength(numberOfChars: Int): Int {
+        return numberOfChars * 2
     }
+
 }
