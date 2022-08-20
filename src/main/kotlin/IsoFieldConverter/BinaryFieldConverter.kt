@@ -17,9 +17,11 @@ class BinaryFieldConverter(paddingWith: Char? = '0') : BaseIsoFieldConverter(pad
     }
 
     override fun toHex(value: String, fieldLength: Int): String {
+        val length = value.length
         var binaryString = ""
-        for (i in 4 until fieldLength step 4) {
-            val intValue = Integer.parseInt(value.substring(i - 4, i), 2)
+        for (i in 0 until fieldLength step 4) {
+            val splitedBinary = value.substring(i, i + 4)
+            val intValue = Integer.parseInt(splitedBinary, 2)
             binaryString += Integer.toHexString(intValue)
         }
         return binaryString.uppercase()

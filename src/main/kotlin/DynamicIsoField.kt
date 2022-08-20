@@ -6,35 +6,46 @@ class DynamicIsoField(
     maxLength: Int,
     conversion: BaseIsoFieldConverter = AsciiFieldConverter(),
     defaultValue: String? = null,
-    private val lengthOfLengthInHex: Int = 2
-) : BaseIsoField(maxLength, conversion, false, defaultValue) {
-
-    override fun setFieldValue(value: String) {
-        this.value = value
-        hex = null
-        length = lengthOfLengthInHex + value.length
-    }
-
-    override fun getLengthFromHex(hexValue: String): Int {
-        return BcdFieldConverter().fromHex(
-            hexValue.substring(0, BcdFieldConverter().getLength(lengthOfLengthInHex))
-        ).toInt()
-    }
-
-    override fun setHexValue(hexValue: String) {
-        length = BcdFieldConverter().fromHex(
-            hexValue.substring(0, BcdFieldConverter().getLength(lengthOfLengthInHex))
-        ).toInt()
-        hex = hexValue.substring(BcdFieldConverter().getLength(lengthOfLengthInHex), length)
-        value = conversion.fromHex(hex!!)
-    }
+    private val lengthOfLengthInHex: Int = 2,
+    private val lengthConversion: BaseIsoFieldConverter = BcdFieldConverter(),
+) : BaseIsoField(maxLength, conversion, defaultValue) {
 
     override var hex: String? = null
         get() {
             return if (value != null && field == null)
                 BcdFieldConverter().toHex(
-                    length.toString(), BcdFieldConverter().getLength(lengthOfLengthInHex)
-                ) + conversion.toHex(value!!, length)
+                    fieldLength.toString(), BcdFieldConverter().getLength(lengthOfLengthInHex)
+                ) + conversion.toHex(value!!, fieldLength)
             else field;
         }
+
+    override fun setFieldValue(value: String) {
+        this.value = value
+        checkLength(value, maxLength)
+        fieldLength = value.length
+        maxLength = fieldLength
+        hex = null
+    }
+
+
+    override fun setHexValue(hexValue: String) {
+        maxLength = getLengthFromHex(hexValue)
+        fieldLength = lengthConversion.getLength(lengthOfLengthInHex) + maxLength
+
+        hex = hexValue.substring(0, fieldLength)
+
+        val hexValueWithoutLength =
+            hex!!.substring(lengthConversion.getLength(lengthOfLengthInHex))
+
+        value = conversion.fromHex(hexValueWithoutLength)
+    }
+
+    private fun getLengthFromHex(hexValue: String): Int {
+        return conversion.inHexLength(
+            lengthConversion.fromHex(
+                hexValue.substring(0, lengthConversion.getLength(lengthOfLengthInHex))
+            ).toInt()
+        )
+    }
+
 }

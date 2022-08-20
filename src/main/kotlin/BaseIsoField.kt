@@ -1,18 +1,22 @@
 import IsoFieldConverter.BaseIsoFieldConverter
 import IsoFieldConverter.BcdFieldConverter
+import java.lang.Exception
 
 abstract class BaseIsoField(
-    protected var maxLength: Int,
-    val conversion: BaseIsoFieldConverter = BcdFieldConverter(),
-    protected val isFixed: Boolean = true,
-    protected val defaultValue: String? = null
+    maxLength: Int,
+    protected val conversion: BaseIsoFieldConverter = BcdFieldConverter(),
+    private val defaultValue: String? = null
 ) {
 
-    var value: String? = defaultValue
+    var maxLength: Int = maxLength
         protected set
 
-    var length: Int = maxLength
+    open var value: String? = defaultValue
         protected set
+
+    var fieldLength: Int = conversion.inHexLength(maxLength)
+        protected set
+
 
     open var hex: String? = null
         protected set
@@ -21,10 +25,12 @@ abstract class BaseIsoField(
 
     abstract fun setHexValue(hexValue: String)
 
-    abstract fun getLengthFromHex(hexValue: String): Int
+    fun checkLength(value: String, length: Int) {
+        if (value.length > length) throw Exception("max length exceeded max length is: $maxLength")
+    }
 
     override fun toString(): String {
-        return "BaseIsoField(maxLength=$maxLength, conversion=$conversion, isFixed=$isFixed, defaultValue='$defaultValue', value='$value', length=$length)"
+        return "BaseIsoField(maxLength=$maxLength, conversion=$conversion, isFixed=${this is FixedIsoField}, defaultValue='$defaultValue', value='$value', length=$fieldLength)"
     }
 }
 
