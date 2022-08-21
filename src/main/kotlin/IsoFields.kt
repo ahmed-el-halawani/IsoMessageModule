@@ -9,7 +9,7 @@ abstract class IsoFields {
     val field1 = FixedIsoField(64, BcdFieldConverter())
 
     /** primary account number `PAN` */
-    val field2 = FixedIsoField(19, BcdFieldConverter())
+    val field2 = DynamicIsoField(19, BcdFieldConverter(), lengthOfLengthInHex = 1)
 
     /** process code */
     val field3 = FixedIsoField(6, BcdFieldConverter())
