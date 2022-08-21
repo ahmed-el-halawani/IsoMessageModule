@@ -14,9 +14,8 @@ abstract class BaseIsoField(
     open var value: String? = null
         protected set
 
-    var fieldLength: Int = conversion.inHexLength(defaultMaxLength)
+    open var fieldLength: Int = conversion.inHexLength(defaultMaxLength)
         protected set
-
 
     open var hex: String? = null
         protected set
