@@ -14,7 +14,11 @@ abstract class BaseIsoField(
     open var value: String? = defaultValue
         protected set
 
-    var fieldLength: Int = conversion.inHexLength(maxLength)
+    var fieldLength: Int = conversion.inHexLength(maxLength).let {
+        var newLength = it
+        if(it%2!=0) newLength++
+        newLength
+    }
         protected set
 
 

@@ -1,8 +1,5 @@
 package IsoFieldConverter
 
-import sun.security.util.Length
-
-
 abstract class BaseIsoFieldConverter(val paddingWith: Char? = ' ') {
     abstract fun getLength(numberOfChars: Int): Int
     abstract fun fromHex(hexValue: String): String
