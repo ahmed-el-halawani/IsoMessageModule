@@ -3,18 +3,18 @@ import IsoFieldConverter.BcdFieldConverter
 import java.lang.Exception
 
 abstract class BaseIsoField(
-    maxLength: Int,
+    var defaultMaxLength: Int,
     protected val conversion: BaseIsoFieldConverter = BcdFieldConverter(),
-    private val defaultValue: String? = null
+    protected val defaultValue: String = ""
 ) {
 
-    var maxLength: Int = maxLength
+    var valueLength: Int = defaultMaxLength
         protected set
 
-    open var value: String? = defaultValue
+    open var value: String? = null
         protected set
 
-    var fieldLength: Int = conversion.inHexLength(maxLength)
+    var fieldLength: Int = conversion.inHexLength(defaultMaxLength)
         protected set
 
 
@@ -23,14 +23,16 @@ abstract class BaseIsoField(
 
     abstract fun setFieldValue(value: String)
 
+    abstract fun setDefaultValue()
+
     abstract fun setHexValue(hexValue: String)
 
     fun checkLength(value: String, length: Int) {
-        if (value.length > length) throw Exception("max length exceeded max length is: $maxLength")
+        if (value.length > length) throw Exception("max length exceeded max length is: ${this.valueLength}")
     }
 
     override fun toString(): String {
-        return "BaseIsoField(maxLength=$maxLength, conversion=$conversion, isFixed=${this is FixedIsoField}, defaultValue='$defaultValue', value='$value', length=$fieldLength)"
+        return "BaseIsoField(maxLength=$valueLength, conversion=$conversion, isFixed=${this is FixedIsoField}, defaultValue='$defaultValue', value='$value', length=$fieldLength)"
     }
 }
 

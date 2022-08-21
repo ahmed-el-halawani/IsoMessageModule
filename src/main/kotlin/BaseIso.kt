@@ -123,7 +123,7 @@ class BaseIso : IsoFields() {
                     "[field%s] : fieldLength:%s ||hexValueLength:%s ||  value:%s || hexValue:%s ",
                     fieldIndex + 1,
                     field.fieldLength,
-                    field.maxLength,
+                    field.valueLength,
                     field.value,
                     field.hex,
                 )

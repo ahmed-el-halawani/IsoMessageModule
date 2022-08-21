@@ -5,32 +5,44 @@ import IsoFieldConverter.BcdFieldConverter
 class DynamicIsoField(
     maxLength: Int,
     conversion: BaseIsoFieldConverter = AsciiFieldConverter(),
-    defaultValue: String? = null,
+    defaultValue: String = "",
     private val lengthOfLengthInHex: Int = 2,
     private val lengthConversion: BaseIsoFieldConverter = BcdFieldConverter(),
 ) : BaseIsoField(maxLength, conversion, defaultValue) {
 
     override var hex: String? = null
         get() {
-            return if (value != null && field == null)
-                BcdFieldConverter().toHex(
-                    fieldLength.toString(), BcdFieldConverter().getLength(lengthOfLengthInHex)
-                ) + conversion.toHex(value!!, fieldLength)
-            else field;
+            if (value != null && field == null) {
+                val lengthInHex =
+                    lengthConversion.toHex(fieldLength.toString(), lengthConversion.getLength(lengthOfLengthInHex))
+                val valueInHex = conversion.toHex(value!!, fieldLength)
+
+                field = lengthInHex + valueInHex
+            }
+
+            return field
         }
 
     override fun setFieldValue(value: String) {
+        checkLength(value, defaultMaxLength)
         this.value = value
-        checkLength(value, maxLength)
         fieldLength = value.length
-        maxLength = fieldLength
+        valueLength = fieldLength
+        hex = null
+    }
+
+    override fun setDefaultValue() {
+        checkLength(defaultValue, defaultMaxLength)
+        this.value = defaultValue
+        fieldLength = defaultValue.length
+        valueLength = fieldLength
         hex = null
     }
 
 
     override fun setHexValue(hexValue: String) {
-        maxLength = getLengthFromHex(hexValue)
-        fieldLength = lengthConversion.getLength(lengthOfLengthInHex) + maxLength
+        valueLength = getLengthFromHex(hexValue)
+        fieldLength = lengthConversion.getLength(lengthOfLengthInHex) + valueLength
 
         hex = hexValue.substring(0, fieldLength)
 
