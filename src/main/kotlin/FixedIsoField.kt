@@ -15,6 +15,13 @@ class FixedIsoField(
             else field;
         }
 
+    override var fieldLength: Int = conversion.inHexLength(defaultMaxLength).let {
+        var newLength = it
+        if (it % 2 != 0) newLength++
+        newLength
+    }
+
+
     override fun setFieldValue(value: String) {
         checkLength(value, defaultMaxLength)
         this.value = value
