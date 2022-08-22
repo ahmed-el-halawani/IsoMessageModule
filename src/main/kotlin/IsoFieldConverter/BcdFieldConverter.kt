@@ -1,6 +1,6 @@
 package IsoFieldConverter
 
-import IsoHelpers.paddingLeft
+import utils.IsoHelpers.paddingLeft
 
 
 class BcdFieldConverter(paddingWith: Char? = '0') : BaseIsoFieldConverter(paddingWith) {

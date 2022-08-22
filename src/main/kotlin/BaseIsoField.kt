@@ -1,5 +1,6 @@
 import IsoFieldConverter.BaseIsoFieldConverter
 import IsoFieldConverter.BcdFieldConverter
+import standerIsoFields.FixedIsoField
 import java.lang.Exception
 
 abstract class BaseIsoField(

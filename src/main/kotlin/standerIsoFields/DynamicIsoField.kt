@@ -1,3 +1,6 @@
+package standerIsoFields
+
+import BaseIsoField
 import IsoFieldConverter.AsciiFieldConverter
 import IsoFieldConverter.BaseIsoFieldConverter
 import IsoFieldConverter.BcdFieldConverter

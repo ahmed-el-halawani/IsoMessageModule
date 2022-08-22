@@ -1,7 +1,8 @@
+package standerIsoFields
+
+import BaseIsoField
 import IsoFieldConverter.BaseIsoFieldConverter
 import IsoFieldConverter.BcdFieldConverter
-import java.lang.Exception
-import kotlin.math.max
 
 class FixedIsoField(
     maxLength: Int, conversion: BaseIsoFieldConverter = BcdFieldConverter(), defaultValue: String = ""

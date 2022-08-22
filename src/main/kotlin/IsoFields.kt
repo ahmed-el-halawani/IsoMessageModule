@@ -1,6 +1,8 @@
 import IsoFieldConverter.AsciiFieldConverter
 import IsoFieldConverter.BcdFieldConverter
 import IsoFieldConverter.BinaryFieldConverter
+import standerIsoFields.DynamicIsoField
+import standerIsoFields.FixedIsoField
 
 abstract class IsoFields {
     protected val bitmap = FixedIsoField(64, BinaryFieldConverter())
