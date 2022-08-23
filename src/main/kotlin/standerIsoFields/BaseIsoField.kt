@@ -1,18 +1,19 @@
+package standerIsoFields
+
 import IsoFieldConverter.BaseIsoFieldConverter
 import IsoFieldConverter.BcdFieldConverter
 import standerIsoFields.FixedIsoField
 import java.lang.Exception
 
-abstract class BaseIsoField(
+abstract class BaseIsoField<T>(
     var defaultMaxLength: Int,
-    protected val conversion: BaseIsoFieldConverter = BcdFieldConverter(),
-    protected val defaultValue: String = ""
+    protected val conversion: BaseIsoFieldConverter<T>,
+    protected val defaultValue: T? = null
 ) {
-
     var valueLength: Int = defaultMaxLength
         protected set
 
-    open var value: String? = null
+    open var value: T? = null
         protected set
 
     open var fieldLength: Int = conversion.inHexLength(defaultMaxLength)
@@ -21,7 +22,7 @@ abstract class BaseIsoField(
     open var hex: String? = null
         protected set
 
-    abstract fun setFieldValue(value: String)
+    abstract fun setFieldValue(value: T)
 
     abstract fun setDefaultValue()
 
@@ -32,7 +33,7 @@ abstract class BaseIsoField(
     }
 
     override fun toString(): String {
-        return "BaseIsoField(maxLength=$valueLength, conversion=$conversion, isFixed=${this is FixedIsoField}, defaultValue='$defaultValue', value='$value', length=$fieldLength)"
+        return "standerIsoFields.BaseIsoField(maxLength=$valueLength, conversion=$conversion,  defaultValue='$defaultValue', value='$value', length=$fieldLength)"
     }
 }
 

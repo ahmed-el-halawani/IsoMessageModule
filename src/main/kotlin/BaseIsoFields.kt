@@ -1,10 +1,14 @@
 import IsoFieldConverter.AsciiFieldConverter
 import IsoFieldConverter.BcdFieldConverter
 import IsoFieldConverter.BinaryFieldConverter
+import IsoFieldConverter.TlvFieldConverter
+import standerIsoFields.BaseIsoField
 import standerIsoFields.DynamicIsoField
 import standerIsoFields.FixedIsoField
+import tlvIsoField.MyTlvConfiguration
+import tlvIsoField.TlvIsoField
 
-abstract class IsoFields {
+abstract class BaseIsoFields {
     protected val bitmap = FixedIsoField(64, BinaryFieldConverter())
 
     /** secondary bitmap */
@@ -79,10 +83,10 @@ abstract class IsoFields {
     val field60 = DynamicIsoField(999, AsciiFieldConverter())
     val field61 = DynamicIsoField(999, AsciiFieldConverter())
     val field62 = DynamicIsoField(999, AsciiFieldConverter())
-    val field63 = DynamicIsoField(999, AsciiFieldConverter())
+    val field63 = TlvIsoField(999, TlvFieldConverter(MyTlvConfiguration()))
     val field64 = FixedIsoField(64, BinaryFieldConverter())
 
-    protected val fields: List<BaseIsoField> = listOf(
+    protected val fields: List<BaseIsoField<*>> = listOf(
         field1,
         field2,
         field3,

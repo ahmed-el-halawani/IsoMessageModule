@@ -1,12 +1,11 @@
 package standerIsoFields
 
-import BaseIsoField
 import IsoFieldConverter.BaseIsoFieldConverter
 import IsoFieldConverter.BcdFieldConverter
 
 class FixedIsoField(
-    maxLength: Int, conversion: BaseIsoFieldConverter = BcdFieldConverter(), defaultValue: String = ""
-) : BaseIsoField(maxLength, conversion, defaultValue) {
+    maxLength: Int, conversion: BaseIsoFieldConverter<String> = BcdFieldConverter(), defaultValue: String = ""
+) : BaseIsoField<String>(maxLength, conversion, defaultValue) {
 
 
     override var hex: String? = null
@@ -30,7 +29,7 @@ class FixedIsoField(
     }
 
     override fun setDefaultValue() {
-        checkLength(defaultValue, defaultMaxLength)
+        checkLength(defaultValue.toString(), defaultMaxLength)
         this.value = defaultValue
         hex = null
     }

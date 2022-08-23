@@ -1,17 +1,17 @@
-package standerIsoFields
+package tlvIsoField
 
-import IsoFieldConverter.AsciiFieldConverter
 import IsoFieldConverter.BaseIsoFieldConverter
 import IsoFieldConverter.BcdFieldConverter
+import com.google.gson.JsonObject
+import standerIsoFields.BaseIsoField
 
-open class DynamicIsoField(
+class TlvIsoField(
     maxLength: Int,
-    conversion: BaseIsoFieldConverter<String>,
-    defaultValue: String? = null,
+    conversion: BaseIsoFieldConverter<JsonObject>,
+    defaultValue: JsonObject? = null,
     private val lengthOfLengthInHex: Int = 2,
     private val lengthConversion: BaseIsoFieldConverter<String> = BcdFieldConverter(),
-) : BaseIsoField<String>(maxLength, conversion, defaultValue) {
-
+) : BaseIsoField<JsonObject>(maxLength, conversion,defaultValue) {
     override var hex: String? = null
         get() {
             if (value != null && field == null) {
@@ -25,10 +25,10 @@ open class DynamicIsoField(
             return field
         }
 
-    override fun setFieldValue(value: String) {
-        checkLength(value, defaultMaxLength)
+    override fun setFieldValue(value: JsonObject) {
+        checkLength(value.size().toString(), defaultMaxLength)
         this.value = value
-        fieldLength = value.length
+        fieldLength = value.size()
         valueLength = fieldLength
         hex = null
     }
@@ -44,8 +44,8 @@ open class DynamicIsoField(
     override fun setHexValue(hexValue: String) {
         valueLength = getLengthFromHex(hexValue)
         fieldLength = lengthConversion.getLength(lengthOfLengthInHex) + valueLength
-
         hex = hexValue.substring(0, fieldLength)
+
 
         val hexValueWithoutLength =
             hex!!.substring(lengthConversion.getLength(lengthOfLengthInHex))
@@ -60,5 +60,6 @@ open class DynamicIsoField(
             ).toInt()
         )
     }
+
 
 }

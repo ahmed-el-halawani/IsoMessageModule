@@ -3,7 +3,7 @@ package IsoFieldConverter
 import utils.IsoHelpers.paddingLeft
 
 
-class BcdFieldConverter(paddingWith: Char? = '0') : BaseIsoFieldConverter(paddingWith) {
+class BcdFieldConverter(paddingWith: Char? = '0') : BaseIsoFieldConverter<String>(paddingWith) {
 
     override fun getLength(numberOfChars: Int): Int {
         return numberOfChars * 2

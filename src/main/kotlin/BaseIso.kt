@@ -1,6 +1,6 @@
 import IsoFieldConverter.BinaryFieldConverter
 
-class BaseIso : IsoFields() {
+class BaseIso : BaseIsoFields() {
     var mti: String = "0000"
     var isoMessage: String = ""
     private var bitmapList: List<Int> = emptyList()

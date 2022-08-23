@@ -1,9 +1,9 @@
 package IsoFieldConverter
 
-abstract class BaseIsoFieldConverter(val paddingWith: Char? = ' ') {
+abstract class BaseIsoFieldConverter<T>(val paddingWith: Char? = ' ') {
     abstract fun getLength(numberOfChars: Int): Int
-    abstract fun fromHex(hexValue: String): String
-    abstract fun toHex(value: String, fieldLength: Int): String
+    abstract fun fromHex(hexValue: String): T
+    abstract fun toHex(value: T, fieldLength: Int): String
 
     abstract fun inHexLength(numberOfChars: Int): Int
 

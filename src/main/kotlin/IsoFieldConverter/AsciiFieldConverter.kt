@@ -1,7 +1,7 @@
 package IsoFieldConverter
 
 
-class AsciiFieldConverter(paddingWith: Char? = ' ') : BaseIsoFieldConverter(paddingWith) {
+class AsciiFieldConverter(paddingWith: Char? = ' ') : BaseIsoFieldConverter<String>(paddingWith) {
 
     override fun getLength(numberOfChars: Int): Int {
         return numberOfChars

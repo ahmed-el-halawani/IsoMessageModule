@@ -1,6 +1,6 @@
 package IsoFieldConverter
 
-class HexFieldConverter(paddingWith: Char? = ' ') : BaseIsoFieldConverter(paddingWith) {
+class HexFieldConverter(paddingWith: Char? = ' ') : BaseIsoFieldConverter<String>(paddingWith) {
 
     override fun getLength(numberOfChars: Int): Int {
         return numberOfChars

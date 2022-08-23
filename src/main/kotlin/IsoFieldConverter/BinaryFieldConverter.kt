@@ -1,7 +1,7 @@
 package IsoFieldConverter
 
 
-class BinaryFieldConverter(paddingWith: Char? = '0') : BaseIsoFieldConverter(paddingWith) {
+class BinaryFieldConverter(paddingWith: Char? = '0') : BaseIsoFieldConverter<String>(paddingWith) {
 
     override fun getLength(numberOfChars: Int): Int {
         return numberOfChars * 8
