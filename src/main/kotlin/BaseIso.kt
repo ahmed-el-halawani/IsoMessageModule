@@ -13,6 +13,16 @@ class BaseIso : BaseIsoFields() {
         parseDataField(bitmapList, dataField)
     }
 
+    fun parseIsoMessageWithHeader(isoMessage: String) {
+        val isoMessage2 = isoMessage.substring(10)
+        this.isoMessage = isoMessage2
+        mti = extractMti(isoMessage2)
+        bitmapList = extractBitmapToList(isoMessage2)
+        val dataField = extractDataField(isoMessage2)
+        parseDataField(bitmapList, dataField)
+    }
+
+
     fun parseIsoMessage() {
         this.isoMessage = mti
         bitmapList = extractBitmapFromFieldsToList()

@@ -3,12 +3,11 @@ package IsoFieldConverter
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
-import com.sun.jdi.event.ExceptionEvent
-import standerIsoFields.DynamicIsoField
 import tlvIsoField.Tlv
 import tlvIsoField.TlvConfiguration
 import tlvIsoField.TlvConfigurationField
-import java.text.FieldPosition
+import java.nio.ByteBuffer
+import java.nio.ByteOrder
 
 
 class TlvFieldConverter(
@@ -74,7 +73,7 @@ class TlvFieldConverter(
         var position=0
         while (position<length){
             val tlv = getTlvFromHex(objectHexValue,position)
-            position+= tlv.endPosition
+            position+= tlv.fieldLength
             when(tlv.field.valueType){
                 TlvConfigurationField.ValueTypes.Value -> objectJson.addProperty(tlv.field.tag,getJsonValue(tlv.value,tlv.field))
                 TlvConfigurationField.ValueTypes.List -> objectJson.add(tlv.field.tag,getJsonArray(tlv.value,tlv.length) )
@@ -85,10 +84,24 @@ class TlvFieldConverter(
         return objectJson
     }
 
+    private val HEX_ARRAY = "0123456789ABCDEF".toCharArray()
+
+    fun bytesToHex(bytes: ByteArray): String {
+        val hexChars = CharArray(bytes.size * 2)
+        for (j in bytes.indices) {
+            val v = bytes[j].toInt() and 0xFF
+            hexChars[j * 2] = HEX_ARRAY[v ushr 4]
+            hexChars[j * 2 + 1] = HEX_ARRAY[v and 0x0F]
+        }
+        return String(hexChars)
+    }
+
     fun getTlvFromHex(hexString:String,positionInString: Int):Tlv{
         var position = positionInString
         val tagLength = configuration.tagLengthConverter.getLength(configuration.tagLength())
-        val tag = configuration.tagLengthConverter.fromHex(hexString.substring(position,tagLength))
+        val india = ByteOrder.nativeOrder()
+        val tag = hexString.substring(position,position+tagLength)
+
         val field = configuration.getConfigurationFieldWithTag(tag) ?: throw Exception("field not init in configuration")
         val lengthOfLength = field.lengthConversion.getLength(field.lengthOfLengthInHex)
         position += tagLength

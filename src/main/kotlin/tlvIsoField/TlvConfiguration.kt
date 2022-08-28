@@ -14,7 +14,7 @@ abstract class TlvConfiguration {
     fun getConfigurationFields():List<TlvConfigurationField> = setConfigurationFieldsList()
 
     fun getConfigurationFieldWithTag(tag:String):TlvConfigurationField?{
-        return setConfigurationFieldsList().firstOrNull { it.tag == tag }
+        return setConfigurationFieldsList().firstOrNull { it.tag.uppercase() == tag.uppercase() }
     }
 }
 
@@ -35,7 +35,7 @@ class TlvValueField(
     valueConversion: BaseIsoFieldConverter<String>? = null,
     lengthOfLengthInHex: Int = 2,
     lengthConversion: BaseIsoFieldConverter<String> = BcdFieldConverter()
-) : TlvConfigurationField(tag,ValueTypes.List, valueConversion, lengthOfLengthInHex, lengthConversion)
+) : TlvConfigurationField(tag,ValueTypes.Value, valueConversion, lengthOfLengthInHex, lengthConversion)
 
 abstract class TlvConfigurationField(
     val tag: String,
